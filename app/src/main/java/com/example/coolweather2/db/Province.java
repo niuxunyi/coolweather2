@@ -1,11 +1,12 @@
-package db;
+package com.example.coolweather2.db;
 
-import org.litepal.crud.DataSupport;
 
-public class Province extends DataSupport {
+import org.litepal.crud.LitePalSupport;
+
+public class Province extends LitePalSupport {
     private int id;
-    private String provinceName;
-    private int provinceCode;
+    private String provinceName;    // 省的名字
+    private int provinceCode;       // 省的代号
 
     public int getId() {
         return id;
