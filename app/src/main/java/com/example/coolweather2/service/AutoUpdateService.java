@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.example.coolweather2.MyApplication;
 import com.example.coolweather2.gson.Weather;
 import com.example.coolweather2.util.HttpUtil;
 import com.example.coolweather2.util.LogUtil;
@@ -26,9 +27,8 @@ import okhttp3.Response;
 
 
 public class AutoUpdateService extends Service {
+
     private static final String TAG="AutoUpdateService";
-    public AutoUpdateService() {
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -61,7 +61,7 @@ public class AutoUpdateService extends Service {
         if (weatherString != null) {
             //  有缓存时直接解析天气数据
             LogUtil.d(TAG,"in AutoUpdateService");
-            Toast.makeText(getApplicationContext(), "加载呢",Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "加载呢",Toast.LENGTH_LONG);
             Weather weather = Utility.handleWeatherResponse(weatherString);
             final String weatherId  = weather.basic.weatherId;
             String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=4b7ad80fa15241acb7d8daee3228df7a";
@@ -79,7 +79,10 @@ public class AutoUpdateService extends Service {
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
                         editor.putString("weather", responseText);
                         editor.apply();
+
                     }
+
+
                 }
             });
 

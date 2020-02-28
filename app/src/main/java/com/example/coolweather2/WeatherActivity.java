@@ -107,7 +107,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather", null);
-        weatherId = getIntent().getStringExtra("weather_id");
+        weatherId = getIntent().getStringExtra("weather_id"); // 从Intent中取出weather_id
 
         String bingPic = prefs.getString("bing_pic", null);
         if(bingPic!= null){
@@ -122,17 +122,16 @@ public class WeatherActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        if(weatherString != null && weatherId.equals(weatherString.substring(31, 42))){
+        //if(weatherString != null && weatherId.equals(weatherString.substring(31, 42))){
+        if(weatherString != null){
             // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString);
             showWeatherInfo(weather);
         } else {
             // 无缓存时去服务器查询天气
-            weatherLayout.setVisibility(INVISIBLE);
-            requestWeather(weatherId);
+            weatherLayout.setVisibility(INVISIBLE);// 请求数据时要隐藏ScrollView,避免出现空界面
+            requestWeather(weatherId); // 从服务器请求天气信息
         }
-
-
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -140,7 +139,6 @@ public class WeatherActivity extends AppCompatActivity {
                 requestWeather(weatherId);
             }
         });
-
     }
 
 
@@ -170,12 +168,13 @@ public class WeatherActivity extends AppCompatActivity {
                 final Weather weather = Utility.handleWeatherResponse(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
+                    public void run() {         // 切换到主线程
                         if (weather != null && "ok".equals(weather.status)) {
+                            // 请求天气成功，先将天气数据缓存到SharedPreferences当中
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather",responseText);
                             editor.apply();
-                            showWeatherInfo(weather);
+                            showWeatherInfo(weather);   //  然后显示天气信息
 
                         } else {
                             Toast.makeText(WeatherActivity.this, "获取天气信息失败",Toast.LENGTH_SHORT).show();
@@ -227,7 +226,7 @@ public class WeatherActivity extends AppCompatActivity {
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);
-        weatherLayout.setVisibility(View.VISIBLE);
+        weatherLayout.setVisibility(View.VISIBLE);  // 设置ScrollView为可见
         if(weather != null && "ok".equals(weather.status)){
             Intent intent = new Intent(this, AutoUpdateService.class);
             startService(intent);

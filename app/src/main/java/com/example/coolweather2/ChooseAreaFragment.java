@@ -71,6 +71,7 @@ public class ChooseAreaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // 加载碎片的布局时调用
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
@@ -83,6 +84,7 @@ public class ChooseAreaFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        // 在碎片相关联的活动已经创建完时调用
         super.onActivityCreated(savedInstanceState);
         LogUtil.d(TAG,"onActivityCreated");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -99,8 +101,8 @@ public class ChooseAreaFragment extends Fragment {
                     String weatherId = selectedCounty.getWeatherId();
                     if (getActivity() instanceof MainActivity){
                         Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        intent.putExtra("weather_id", weatherId);
-                        startActivity(intent);
+                        intent.putExtra("weather_id", weatherId); // 把当前选中县的weatherId传递过去
+                        startActivity(intent);  // 启动WeatherActivity
                         //getActivity().finish();
                     } else if ( getActivity() instanceof WeatherActivity) {
                         WeatherActivity activity = (WeatherActivity) getActivity();
@@ -196,7 +198,6 @@ public class ChooseAreaFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 Log.d(TAG, "onResponse()");
                 String responseText = response.body().string();
-                Log.d(TAG, responseText);
                 boolean result = false;
                 if ("province".equals(type)) {
                     result = Utility.handleProvinceResponse(responseText);
@@ -205,17 +206,19 @@ public class ChooseAreaFragment extends Fragment {
                 } else if ("county".equals(type)) {
                     result = Utility.handleCountyResponse(responseText, selectedCity.getId());
                 }
+
                 if (result) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
-                        public void run() {
+                        public void run() {  // 切换到主线程，以便进行UI操作
                             closeProgressDialog();
                             if ("province".equals(type)){
-                                queryProvinces();
+                                queryProvinces();        // 有UI操作
                             } else if ("city".equals(type)) {
-                                queryCities();
+                                queryCities();           // 有UI操作
                             } else if ("county".equals(type)) {
-                                queryCounties();
+                                queryCounties();         // 有UI操作
+
                             }
                         }
                     });

@@ -55,6 +55,7 @@ public class Utility {    // 工具类，用于解析和处理服务器返回的
                     city.setProvinceId(provinceId);
                     city.save();        // 储存到数据库中
                 }
+                return true;
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -78,6 +79,7 @@ public class Utility {    // 工具类，用于解析和处理服务器返回的
                     county.setWeatherId(countyObject.getString("weather_id"));
                     county.save(); // 储存到数据库中
                 }
+                return true;
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -93,6 +95,8 @@ public class Utility {    // 工具类，用于解析和处理服务器返回的
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
             String weatherContent = jsonArray.getJSONObject(0).toString();
+            //Gson gson = new Gson();
+            // return gson.fromJson(weatherContent, Weather.class);
             return new Gson().fromJson(weatherContent, Weather.class);
         } catch (Exception e){
             e.printStackTrace();

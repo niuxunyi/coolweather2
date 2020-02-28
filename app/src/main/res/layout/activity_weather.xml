@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--  DrawerLayout 的第一个直接子布局为主屏幕内容：实现下拉刷新 -->
+        <!--  DrawerLayout 的第一个直接子布局为主屏幕内容：能实现下拉刷新 -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"

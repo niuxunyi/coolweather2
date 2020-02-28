@@ -15,14 +15,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(prefs.getString("weather", null) != null) {
             Intent intent = new Intent(this, WeatherActivity.class);
-            startActivity(intent);
-            //finish();
+            startActivity(intent);  // 启动WeatherActivity
+            finish(); // 销毁当前活动
         }
 
-*/
+
     }
 }
